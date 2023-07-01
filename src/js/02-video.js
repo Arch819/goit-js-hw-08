@@ -7,11 +7,7 @@ import throttle from 'lodash.throttle';
 import Player from '@vimeo/player';
 
 
-const player = new Player('vimeo-player', {
-   id: 19231868,
-   width: 640,
-   loop: true,
-});
+const player = new Player('vimeo-player');
 
 const PLAYER_CURRENT_TIME = 'videoplayer - current - time';
 onPageloading();

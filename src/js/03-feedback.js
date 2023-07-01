@@ -14,6 +14,7 @@ textareaRef.addEventListener('input', throttle(onUserDate, 500));
 
 function onFormSubmit(event) {
   event.preventDefault();
+  if (!inputRef.value || !textareaRef.value) return alert("Заповніть всі поля");
 
   const feedbackForm = localStorage.getItem(USER_STORAGE)
   console.log(JSON.parse(feedbackForm));
