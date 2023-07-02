@@ -1,59 +1,45 @@
 import throttle from 'lodash.throttle';
 
 const formRef = document.querySelector('.feedback-form');
-const inputRef = formRef.querySelector('input');
-const textareaRef = formRef.querySelector('textarea');
 
 const USER_STORAGE = 'feedback-form-state';
+const { email, message } = formRef.elements;
+
 availableMessage();
 
+formRef.addEventListener('input', throttle(onUserDate, 500));
 formRef.addEventListener('submit', onFormSubmit);
-// formRef.addEventListener('input', onUserDate);
-inputRef.addEventListener('input', throttle(onUserDate, 500));
-textareaRef.addEventListener('input', throttle(onUserDate, 500));
+
 
 function onFormSubmit(event) {
   event.preventDefault();
-  if (!inputRef.value || !textareaRef.value) return alert("Заповніть всі поля");
+  if (!email.value.trim() || !message.value.trim()) return alert('Заповніть всі поля');
 
-  const feedbackForm = localStorage.getItem(USER_STORAGE)
-  console.log(JSON.parse(feedbackForm));
+  const feedbackMessage = JSON.parse(localStorage.getItem(USER_STORAGE));
+  console.log(`
+  email: ${feedbackMessage.email};
+  message: ${feedbackMessage.message}
+  `);
   event.currentTarget.reset();
   localStorage.removeItem(USER_STORAGE);
 }
 
-// function onUserDate(event) {
-//   const { email, message } = event.currentTarget.elements;
-
-//   const emailUser = email.value;
-//   const messageUser = message.value;
-
-//   const userDate = {
-//     email: emailUser,
-//     message: messageUser,
-//   };
-  
-//     localStorage.setItem(USER_STORAGE, JSON.stringify(userDate));
-// }
-
 function onUserDate() {
-  const emailUser = inputRef.value;
-  const messageUser = textareaRef.value;
+const emailUser = email.value.trim();
+const messageUser = message.value.trim();
 
   const userDate = {
     email: emailUser,
     message: messageUser,
   };
-
-  localStorage.setItem(USER_STORAGE, JSON.stringify(userDate));
+    localStorage.setItem(USER_STORAGE, JSON.stringify(userDate));
 }
 
 function availableMessage() {
   const saveDate = JSON.parse(localStorage.getItem(USER_STORAGE));
-  console.dir(formRef);
 
   if (saveDate) {
-    formRef.elements.email.value = saveDate.email;
-    formRef.elements.message.value = saveDate.message;
+    email.value = saveDate.email;
+    message.value = saveDate.message;
   }
 }
